@@ -1,0 +1,28 @@
+server:
+  port: 9009
+
+security-properties:
+  security:
+    encryptionSecretKey: gravicappa
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/bcsm_db
+    username: postgres
+    password: postgres
+    hikari:
+      schema: public
+      connectionInitSql: select set_config('encryption.key', '${security-properties.security.encryptionSecretKey}', false)
+
+  jpa:
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+
+  liquibase:
+    enabled: true
+    change-log: classpath:/db/changelog/db.changelog-master.yaml
