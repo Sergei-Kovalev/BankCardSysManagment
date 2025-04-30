@@ -17,15 +17,14 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class AdminUserServiceImpl implements AdminUserService {
+    private final static String DELETED_SUCCESSFULLY = "Пользователь с ID: %s успешно удалён";
 
     private final UserRepository userRepository;
     private final UserMapperForAdmin mapper;
 
-    private final static String DELETED_SUCCESSFULLY = "Пользователь с ID: %s успешно удалён";
-
     @Override
-    public FullUserInfoResponseDto getUserInformationById(UUID userId) {
-        return userRepository.findById(userId)
+    public FullUserInfoResponseDto getUserInformationById(String userId) {
+        return userRepository.findById(UUID.fromString(userId))
                 .map(mapper::entityToDto)
                 .orElseThrow(UserNotFoundException::new);
     }
@@ -46,8 +45,8 @@ public class AdminUserServiceImpl implements AdminUserService {
 
     @Transactional
     @Override
-    public FullUserInfoResponseDto updateUser(UUID userId, UserInfoRequestDto userInfoRequestDto) {
-        return userRepository.findById(userId)
+    public FullUserInfoResponseDto updateUser(String userId, UserInfoRequestDto userInfoRequestDto) {
+        return userRepository.findById(UUID.fromString(userId))
                 .map(user -> {
                     user.setFirstAndLastName(userInfoRequestDto.getFirstAndLastName());
                     return mapper.entityToDto(userRepository.save(user));
@@ -56,8 +55,8 @@ public class AdminUserServiceImpl implements AdminUserService {
     }
 
     @Override
-    public String deleteUser(UUID userId) {
-        userRepository.deleteById(userId);
+    public String deleteUser(String userId) {
+        userRepository.deleteById(UUID.fromString(userId));
         return String.format(DELETED_SUCCESSFULLY, userId);
     }
 }

@@ -1,25 +1,56 @@
 package jdev.kovalev.BankCardSysManagment.controller;
 
+import jdev.kovalev.BankCardSysManagment.dto.request.CardInfoRequestDto;
 import jdev.kovalev.BankCardSysManagment.dto.response.FullCardInfoResponseDto;
 import jdev.kovalev.BankCardSysManagment.service.AdminCardService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.constraints.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.UUID;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin/cards")
 public class AdminCardController {
+
+    public static final String WRONG_UUID = "Неверный UUID";
     private final AdminCardService adminCardService;
 
     @GetMapping("/{cardId}")
-    public ResponseEntity<FullCardInfoResponseDto> getCardInformationByCardId(@PathVariable UUID cardId) {
+    public ResponseEntity<FullCardInfoResponseDto> getCardInformationByCardId(@PathVariable @UUID(message = WRONG_UUID) String cardId) {
         return new ResponseEntity<>(adminCardService.getCardInformationById(cardId), HttpStatus.OK);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<FullCardInfoResponseDto>> getAllCardsInformation() {
+        return new ResponseEntity<>(adminCardService.getAllCards(), HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<FullCardInfoResponseDto> createCard(@Validated @RequestBody CardInfoRequestDto cardInfoRequestDto) {
+        return new ResponseEntity<>(adminCardService.createCard(cardInfoRequestDto), HttpStatus.CREATED);
+    }
+
+    @PutMapping
+    public ResponseEntity<String> changeStatus(@RequestParam @UUID(message = WRONG_UUID) String cardId,
+                                               @RequestParam String status) {
+        return new ResponseEntity<>(adminCardService.changeStatus(cardId, status), HttpStatus.OK);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<String> deleteCard(@RequestParam @UUID(message = WRONG_UUID) String cardId) {
+        return new ResponseEntity<>(adminCardService.delete(cardId), HttpStatus.OK);
     }
 }
