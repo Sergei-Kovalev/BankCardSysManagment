@@ -41,7 +41,7 @@ public class AdminCardController {
         return new ResponseEntity<>(adminCardService.createCard(cardInfoRequestDto), HttpStatus.CREATED);
     }
 
-    @PutMapping(produces = "text/plain;charset=UTF-8")
+    @PutMapping(value = "/", produces = "text/plain;charset=UTF-8")
     public ResponseEntity<String> changeStatus(@RequestParam String cardId,
                                                @RequestParam String status) {
         return new ResponseEntity<>(adminCardService.changeStatus(cardId, status), HttpStatus.OK);
