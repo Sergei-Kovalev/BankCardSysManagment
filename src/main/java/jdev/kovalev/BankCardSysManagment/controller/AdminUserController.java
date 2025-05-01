@@ -4,7 +4,6 @@ import jdev.kovalev.BankCardSysManagment.dto.request.UserInfoRequestDto;
 import jdev.kovalev.BankCardSysManagment.dto.response.FullUserInfoResponseDto;
 import jdev.kovalev.BankCardSysManagment.service.AdminUserService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.constraints.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -24,11 +23,10 @@ import java.util.List;
 @RequestMapping("/admin/users")
 public class AdminUserController {
 
-    public static final String WRONG_UUID = "Неверный UUID";
     private final AdminUserService adminUserService;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<FullUserInfoResponseDto> getUserInformationByUserId(@PathVariable @UUID(message = "Неверный UUID") String userId) {
+    public ResponseEntity<FullUserInfoResponseDto> getUserInformationByUserId(@PathVariable String userId) {
         return new ResponseEntity<>(adminUserService.getUserInformationById(userId), HttpStatus.OK);
     }
 
@@ -39,18 +37,18 @@ public class AdminUserController {
 
     @PostMapping
     public ResponseEntity<FullUserInfoResponseDto> createUser(@Validated @RequestBody UserInfoRequestDto userInfoRequestDto) {
-        return new ResponseEntity<>(adminUserService.createUser(userInfoRequestDto), HttpStatus.OK);
+        return new ResponseEntity<>(adminUserService.createUser(userInfoRequestDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<FullUserInfoResponseDto> updateUser(@PathVariable @UUID(message = WRONG_UUID) String userId,
-                                                              @RequestBody UserInfoRequestDto userInfoRequestDto) {
+    public ResponseEntity<FullUserInfoResponseDto> updateUser(@PathVariable String userId,
+                                                              @Validated @RequestBody UserInfoRequestDto userInfoRequestDto) {
         return new ResponseEntity<>(adminUserService.updateUser(userId, userInfoRequestDto), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable @UUID(message = WRONG_UUID) String userId) {
+    @DeleteMapping(value = "/{userId}", produces = "text/plain;charset=UTF-8")
+    public ResponseEntity<String> deleteUser(@PathVariable String userId) {
         return new ResponseEntity<>(adminUserService.deleteUser(userId), HttpStatus.OK);
     }
-
 }
+

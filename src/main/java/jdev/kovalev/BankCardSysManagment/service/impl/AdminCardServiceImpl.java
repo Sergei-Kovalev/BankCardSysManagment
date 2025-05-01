@@ -68,6 +68,6 @@ public class AdminCardServiceImpl implements AdminCardService {
     @Override
     public String delete(String cardId) {
         cardRepository.deleteById(UUID.fromString(cardId));
-        return DELETED_SUCCESSFULLY;
+        return String.format(DELETED_SUCCESSFULLY, cardId);
     }
 }

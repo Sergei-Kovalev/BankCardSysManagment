@@ -16,7 +16,7 @@ import java.util.UUID;
 public class FullCardInfoResponseDto {
     private UUID cardId;
     private String cardNumber;
-    private String firstAndLastUserName;
+    private String firstAndLastName;
     private LocalDate expirationDate;
     private String cardStatus;
     private BigDecimal balance;
