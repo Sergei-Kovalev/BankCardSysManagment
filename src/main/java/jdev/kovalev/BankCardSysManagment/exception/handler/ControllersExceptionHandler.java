@@ -1,6 +1,8 @@
 package jdev.kovalev.BankCardSysManagment.exception.handler;
 
+import jdev.kovalev.BankCardSysManagment.exception.CardNotBelongsToUserException;
 import jdev.kovalev.BankCardSysManagment.exception.CardNotFoundException;
+import jdev.kovalev.BankCardSysManagment.exception.NotEnoughMoneyException;
 import jdev.kovalev.BankCardSysManagment.exception.UserNotFoundException;
 import jdev.kovalev.BankCardSysManagment.exception.WrongCardStatusException;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +19,7 @@ import java.util.stream.Collectors;
 
 @RestControllerAdvice
 @RequiredArgsConstructor
-public class AdminControllersExceptionHandler {
+public class ControllersExceptionHandler {
 
     @ExceptionHandler({
             CardNotFoundException.class,
@@ -38,13 +40,18 @@ public class AdminControllersExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(WrongCardStatusException.class)
+    @ExceptionHandler({
+            WrongCardStatusException.class,
+            CardNotBelongsToUserException.class,
+            NotEnoughMoneyException.class})
     public ResponseEntity<CustomErrorResponse> handleWrongStatusException(Exception e, WebRequest request) {
         CustomErrorResponse errorResponse = new CustomErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST, request);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({IllegalArgumentException.class, HttpMessageNotReadableException.class})
+    @ExceptionHandler({
+            IllegalArgumentException.class,
+            HttpMessageNotReadableException.class})
     public ResponseEntity<CustomErrorResponse> handleIllegalArgumentException(Exception e, WebRequest request) {
         CustomErrorResponse errorResponse = new CustomErrorResponse(e.getMessage(), HttpStatus.BAD_REQUEST, request);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);

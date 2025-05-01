@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jdev.kovalev.BankCardSysManagment.dto.request.CardInfoRequestDto;
 import jdev.kovalev.BankCardSysManagment.dto.response.FullCardInfoResponseDto;
 import jdev.kovalev.BankCardSysManagment.exception.CardNotFoundException;
-import jdev.kovalev.BankCardSysManagment.exception.handler.AdminControllersExceptionHandler;
+import jdev.kovalev.BankCardSysManagment.exception.handler.ControllersExceptionHandler;
 import jdev.kovalev.BankCardSysManagment.service.AdminCardService;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,7 +57,7 @@ class AdminCardControllerTest {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders
                 .standaloneSetup(adminCardController)
-                .setControllerAdvice(new AdminControllersExceptionHandler())
+                .setControllerAdvice(new ControllersExceptionHandler())
                 .build();
         objectMapper = new ObjectMapper();
         objectMapper.findAndRegisterModules();
@@ -190,7 +190,7 @@ class AdminCardControllerTest {
             String status = "ACTIVE";
             when(adminCardService.changeStatus(cardId, status))
                     .thenReturn(String.format("Статус карты с id %s успешно изменен", cardId));
-            mockMvc.perform(put("/admin/cards")
+            mockMvc.perform(put("/admin/cards/")
                                     .param("cardId", cardId)
                                     .param("status", status))
                     .andExpect(status().isOk())
@@ -207,7 +207,7 @@ class AdminCardControllerTest {
             when(adminCardService.changeStatus(cardId, status))
                     .thenThrow(new CardNotFoundException());
 
-            mockMvc.perform(put("/admin/cards")
+            mockMvc.perform(put("/admin/cards/")
                                     .param("cardId", cardId)
                                     .param("status", status))
                     .andExpect(status().isNotFound())

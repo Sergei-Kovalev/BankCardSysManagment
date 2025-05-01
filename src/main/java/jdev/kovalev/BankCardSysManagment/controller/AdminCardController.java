@@ -4,6 +4,7 @@ import jdev.kovalev.BankCardSysManagment.dto.request.CardInfoRequestDto;
 import jdev.kovalev.BankCardSysManagment.dto.response.FullCardInfoResponseDto;
 import jdev.kovalev.BankCardSysManagment.service.AdminCardService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.constraints.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -27,7 +28,7 @@ public class AdminCardController {
     private final AdminCardService adminCardService;
 
     @GetMapping("/{cardId}")
-    public ResponseEntity<FullCardInfoResponseDto> getCardInformationByCardId(@PathVariable String cardId) {
+    public ResponseEntity<FullCardInfoResponseDto> getCardInformationByCardId(@PathVariable @UUID String cardId) {
         return new ResponseEntity<>(adminCardService.getCardInformationById(cardId), HttpStatus.OK);
     }
 
@@ -42,13 +43,13 @@ public class AdminCardController {
     }
 
     @PutMapping(value = "/", produces = "text/plain;charset=UTF-8")
-    public ResponseEntity<String> changeStatus(@RequestParam String cardId,
+    public ResponseEntity<String> changeStatus(@RequestParam @UUID String cardId,
                                                @RequestParam String status) {
         return new ResponseEntity<>(adminCardService.changeStatus(cardId, status), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{cardId}", produces = "text/plain;charset=UTF-8")
-    public ResponseEntity<String> deleteCard(@PathVariable String cardId) {
+    public ResponseEntity<String> deleteCard(@PathVariable @UUID String cardId) {
         return new ResponseEntity<>(adminCardService.delete(cardId), HttpStatus.OK);
     }
 }
