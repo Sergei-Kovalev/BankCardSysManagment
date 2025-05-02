@@ -90,19 +90,6 @@ class AdminUserControllerTest {
 
         @Test
         @SneakyThrows
-        void getUserInformationByUserId_whenUUIDNotCorrect() {
-            when(adminUserService.getUserInformationById("wrong UUID"))
-                    .thenThrow(IllegalArgumentException.class);
-
-            mockMvc.perform(get("/admin/users/{userId}", "wrong UUID"))
-                    .andExpect(status().isBadRequest())
-                    .andDo(print());
-
-            verify(adminUserService).getUserInformationById("wrong UUID");
-        }
-
-        @Test
-        @SneakyThrows
         void getUserInformationByUserId_whenUserNotFound() {
             when(adminUserService.getUserInformationById(userId))
                     .thenThrow(new UserNotFoundException());

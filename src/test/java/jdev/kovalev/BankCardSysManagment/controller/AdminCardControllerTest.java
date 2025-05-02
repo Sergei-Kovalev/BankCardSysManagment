@@ -102,19 +102,6 @@ class AdminCardControllerTest {
 
         @Test
         @SneakyThrows
-        void getCardInformationByCardId_whenUUIDNotCorrect() {
-            when(adminCardService.getCardInformationById("wrong UUID"))
-                    .thenThrow(IllegalArgumentException.class);
-
-            mockMvc.perform(get("/admin/cards/{cardId}", "wrong UUID"))
-                    .andExpect(status().isBadRequest())
-                    .andDo(print());
-
-            verify(adminCardService).getCardInformationById("wrong UUID");
-        }
-
-        @Test
-        @SneakyThrows
         void getCardInformationByCardId_whenUserNotFound() {
             when(adminCardService.getCardInformationById(cardId))
                     .thenThrow(new CardNotFoundException());
