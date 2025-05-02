@@ -4,6 +4,7 @@ import jdev.kovalev.BankCardSysManagment.dto.request.UserInfoRequestDto;
 import jdev.kovalev.BankCardSysManagment.dto.response.FullUserInfoResponseDto;
 import jdev.kovalev.BankCardSysManagment.service.AdminUserService;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.constraints.UUID;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -26,7 +27,7 @@ public class AdminUserController {
     private final AdminUserService adminUserService;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<FullUserInfoResponseDto> getUserInformationByUserId(@PathVariable String userId) {
+    public ResponseEntity<FullUserInfoResponseDto> getUserInformationByUserId(@PathVariable @UUID String userId) {
         return new ResponseEntity<>(adminUserService.getUserInformationById(userId), HttpStatus.OK);
     }
 
@@ -41,13 +42,13 @@ public class AdminUserController {
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<FullUserInfoResponseDto> updateUser(@PathVariable String userId,
+    public ResponseEntity<FullUserInfoResponseDto> updateUser(@PathVariable @UUID String userId,
                                                               @Validated @RequestBody UserInfoRequestDto userInfoRequestDto) {
         return new ResponseEntity<>(adminUserService.updateUser(userId, userInfoRequestDto), HttpStatus.OK);
     }
 
     @DeleteMapping(value = "/{userId}", produces = "text/plain;charset=UTF-8")
-    public ResponseEntity<String> deleteUser(@PathVariable String userId) {
+    public ResponseEntity<String> deleteUser(@PathVariable @UUID String userId) {
         return new ResponseEntity<>(adminUserService.deleteUser(userId), HttpStatus.OK);
     }
 }

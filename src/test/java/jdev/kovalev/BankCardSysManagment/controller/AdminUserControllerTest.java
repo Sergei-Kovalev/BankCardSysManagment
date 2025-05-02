@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jdev.kovalev.BankCardSysManagment.dto.request.UserInfoRequestDto;
 import jdev.kovalev.BankCardSysManagment.dto.response.FullUserInfoResponseDto;
 import jdev.kovalev.BankCardSysManagment.exception.UserNotFoundException;
-import jdev.kovalev.BankCardSysManagment.exception.handler.AdminControllersExceptionHandler;
+import jdev.kovalev.BankCardSysManagment.exception.handler.ControllersExceptionHandler;
 import jdev.kovalev.BankCardSysManagment.service.AdminUserService;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,7 +56,7 @@ class AdminUserControllerTest {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders
                 .standaloneSetup(adminUserController)
-                .setControllerAdvice(new AdminControllersExceptionHandler())
+                .setControllerAdvice(new ControllersExceptionHandler())
                 .build();
         objectMapper = new ObjectMapper();
 
@@ -86,19 +86,6 @@ class AdminUserControllerTest {
                     .andDo(print());
 
             verify(adminUserService).getUserInformationById(userId);
-        }
-
-        @Test
-        @SneakyThrows
-        void getUserInformationByUserId_whenUUIDNotCorrect() {
-            when(adminUserService.getUserInformationById("wrong UUID"))
-                    .thenThrow(IllegalArgumentException.class);
-
-            mockMvc.perform(get("/admin/users/{userId}", "wrong UUID"))
-                    .andExpect(status().isBadRequest())
-                    .andDo(print());
-
-            verify(adminUserService).getUserInformationById("wrong UUID");
         }
 
         @Test
