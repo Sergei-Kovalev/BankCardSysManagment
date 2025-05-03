@@ -7,7 +7,6 @@ import jdev.kovalev.BankCardSysManagment.entity.User;
 import jdev.kovalev.BankCardSysManagment.entity.enums.CardStatus;
 import jdev.kovalev.BankCardSysManagment.exception.CardNotFoundException;
 import jdev.kovalev.BankCardSysManagment.exception.UserNotFoundException;
-import jdev.kovalev.BankCardSysManagment.exception.WrongCardStatusException;
 import jdev.kovalev.BankCardSysManagment.mapper.CardMapperForAdmin;
 import jdev.kovalev.BankCardSysManagment.repository.CardRepository;
 import jdev.kovalev.BankCardSysManagment.repository.UserRepository;
@@ -57,11 +56,7 @@ public class AdminCardServiceImpl implements AdminCardService {
     public String changeStatus(String cardId, String status) {
         Card card = cardRepository.findById(UUID.fromString(cardId))
                 .orElseThrow(CardNotFoundException::new);
-        try {
-            card.setCardStatus(CardStatus.valueOf(status.toUpperCase()));
-        } catch (IllegalArgumentException e) {
-            throw new WrongCardStatusException();
-        }
+        card.setCardStatus(CardStatus.valueOf(status.toUpperCase()));
         return String.format(SUCCESSFULLY_CHANGE_STATUS, cardId);
     }
 
