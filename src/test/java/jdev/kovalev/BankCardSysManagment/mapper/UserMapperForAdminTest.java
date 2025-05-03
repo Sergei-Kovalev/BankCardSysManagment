@@ -3,6 +3,7 @@ package jdev.kovalev.BankCardSysManagment.mapper;
 import jdev.kovalev.BankCardSysManagment.dto.request.UserInfoRequestDto;
 import jdev.kovalev.BankCardSysManagment.dto.response.AdminUserInfoResponseDto;
 import jdev.kovalev.BankCardSysManagment.entity.User;
+import jdev.kovalev.BankCardSysManagment.entity.enums.UserRole;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,13 +25,20 @@ class UserMapperForAdminTest {
         user = User.builder()
                 .userId(UUID.fromString(userId))
                 .firstAndLastName("Siarhei Kavaleu")
+                .username("username")
+                .password("password")
+                .role(UserRole.ROLE_USER)
                 .build();
         adminUserInfoResponseDto = AdminUserInfoResponseDto.builder()
                 .userId(UUID.fromString(userId))
                 .firstAndLastName("Siarhei Kavaleu")
+                .role("ROLE_USER")
                 .build();
         userInfoRequestDto = UserInfoRequestDto.builder()
                 .firstAndLastName("Siarhei Kavaleu")
+                .username("username")
+                .password("password")
+                .role("ROLE_USER")
                 .build();
     }
 
