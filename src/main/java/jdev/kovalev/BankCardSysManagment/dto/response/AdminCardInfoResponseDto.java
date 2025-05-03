@@ -13,7 +13,7 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FullCardInfoResponseDto {
+public class AdminCardInfoResponseDto {
     private UUID cardId;
     private String cardNumber;
     private String firstAndLastName;

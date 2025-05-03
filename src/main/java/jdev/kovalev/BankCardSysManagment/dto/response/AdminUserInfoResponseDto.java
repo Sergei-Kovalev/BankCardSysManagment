@@ -11,7 +11,8 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class FullUserInfoResponseDto {
+public class AdminUserInfoResponseDto {
     private UUID userId;
     private String firstAndLastName;
+    private String role;
 }

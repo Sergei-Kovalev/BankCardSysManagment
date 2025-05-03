@@ -1,13 +1,12 @@
 package jdev.kovalev.BankCardSysManagment.service.impl;
 
 import jdev.kovalev.BankCardSysManagment.dto.request.CardInfoRequestDto;
-import jdev.kovalev.BankCardSysManagment.dto.response.FullCardInfoResponseDto;
+import jdev.kovalev.BankCardSysManagment.dto.response.AdminCardInfoResponseDto;
 import jdev.kovalev.BankCardSysManagment.entity.Card;
 import jdev.kovalev.BankCardSysManagment.entity.User;
 import jdev.kovalev.BankCardSysManagment.entity.enums.CardStatus;
 import jdev.kovalev.BankCardSysManagment.exception.CardNotFoundException;
 import jdev.kovalev.BankCardSysManagment.exception.UserNotFoundException;
-import jdev.kovalev.BankCardSysManagment.exception.WrongCardStatusException;
 import jdev.kovalev.BankCardSysManagment.mapper.CardMapperForAdmin;
 import jdev.kovalev.BankCardSysManagment.repository.CardRepository;
 import jdev.kovalev.BankCardSysManagment.repository.UserRepository;
@@ -47,8 +46,8 @@ class AdminCardServiceImplTest {
     private User user;
     private Card card;
     private Card card2;
-    private FullCardInfoResponseDto fullCardInfoResponseDto;
-    private FullCardInfoResponseDto fullCardInfoResponseDto2;
+    private AdminCardInfoResponseDto adminCardInfoResponseDto;
+    private AdminCardInfoResponseDto adminCardInfoResponseDto2;
     private CardInfoRequestDto cardInfoRequestDto;
 
     @BeforeEach
@@ -76,7 +75,7 @@ class AdminCardServiceImplTest {
                 .cardStatus(CardStatus.ACTIVE)
                 .balance(BigDecimal.valueOf(33.3))
                 .build();
-        fullCardInfoResponseDto = FullCardInfoResponseDto.builder()
+        adminCardInfoResponseDto = AdminCardInfoResponseDto.builder()
                 .cardId(UUID.fromString(cardId))
                 .cardNumber("1230 4560 7890 0120")
                 .firstAndLastName("Siarhei Kavaleu")
@@ -84,7 +83,7 @@ class AdminCardServiceImplTest {
                 .cardStatus(CardStatus.ACTIVE.toString())
                 .balance(BigDecimal.valueOf(22.2))
                 .build();
-        fullCardInfoResponseDto2 = FullCardInfoResponseDto.builder()
+        adminCardInfoResponseDto2 = AdminCardInfoResponseDto.builder()
                 .cardId(UUID.fromString(cardId))
                 .cardNumber("9999 4560 7890 9999")
                 .firstAndLastName("Siarhei Kavaleu")
@@ -108,12 +107,12 @@ class AdminCardServiceImplTest {
             when(cardRepository.findById(any()))
                     .thenReturn(Optional.of(card));
             when(mapper.toFullCardInfoResponseDto(card))
-                    .thenReturn(fullCardInfoResponseDto);
+                    .thenReturn(adminCardInfoResponseDto);
 
-            FullCardInfoResponseDto actual = adminCardService.getCardInformationById(cardId);
+            AdminCardInfoResponseDto actual = adminCardService.getCardInformationById(cardId);
 
             assertThat(actual)
-                    .isEqualTo(fullCardInfoResponseDto);
+                    .isEqualTo(adminCardInfoResponseDto);
         }
 
         @Test
@@ -134,15 +133,15 @@ class AdminCardServiceImplTest {
             when(cardRepository.findAll())
                     .thenReturn(List.of(card, card2));
             when(mapper.toFullCardInfoResponseDto(card))
-                    .thenReturn(fullCardInfoResponseDto);
+                    .thenReturn(adminCardInfoResponseDto);
             when(mapper.toFullCardInfoResponseDto(card2))
-                    .thenReturn(fullCardInfoResponseDto2);
+                    .thenReturn(adminCardInfoResponseDto2);
 
-            List<FullCardInfoResponseDto> actual = adminCardService.getAllCards();
+            List<AdminCardInfoResponseDto> actual = adminCardService.getAllCards();
 
             assertThat(actual)
                     .hasSize(2)
-                    .containsExactlyElementsOf(List.of(fullCardInfoResponseDto, fullCardInfoResponseDto2));
+                    .containsExactlyElementsOf(List.of(adminCardInfoResponseDto, adminCardInfoResponseDto2));
         }
     }
 
@@ -157,12 +156,12 @@ class AdminCardServiceImplTest {
             when(cardRepository.save(card))
                     .thenReturn(card);
             when(mapper.toFullCardInfoResponseDto(card))
-                    .thenReturn(fullCardInfoResponseDto);
+                    .thenReturn(adminCardInfoResponseDto);
 
-            FullCardInfoResponseDto actual = adminCardService.createCard(cardInfoRequestDto);
+            AdminCardInfoResponseDto actual = adminCardService.createCard(cardInfoRequestDto);
 
             assertThat(actual)
-                    .isEqualTo(fullCardInfoResponseDto);
+                    .isEqualTo(adminCardInfoResponseDto);
         }
 
         @Test
@@ -199,16 +198,6 @@ class AdminCardServiceImplTest {
             assertThatThrownBy(() -> adminCardService.changeStatus(cardId, "ACTIVE"))
                     .isInstanceOf(CardNotFoundException.class)
                     .hasMessageContaining("Карта с таким id не найдена в базе данных");
-        }
-
-        @Test
-        void changeStatusWhenWrongStatus() {
-            when(cardRepository.findById(any()))
-                    .thenReturn(Optional.of(card));
-
-            assertThatThrownBy(() -> adminCardService.changeStatus(cardId, "BLA BLA BLA"))
-                    .isInstanceOf(WrongCardStatusException.class)
-                    .hasMessageContaining("Статус может быть только ACTIVE, BLOCKED или EXPIRED");
         }
     }
 

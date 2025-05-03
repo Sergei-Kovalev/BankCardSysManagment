@@ -1,7 +1,7 @@
 package jdev.kovalev.BankCardSysManagment.service.impl;
 
 import jdev.kovalev.BankCardSysManagment.dto.request.CardInfoRequestDto;
-import jdev.kovalev.BankCardSysManagment.dto.response.FullCardInfoResponseDto;
+import jdev.kovalev.BankCardSysManagment.dto.response.AdminCardInfoResponseDto;
 import jdev.kovalev.BankCardSysManagment.entity.Card;
 import jdev.kovalev.BankCardSysManagment.entity.User;
 import jdev.kovalev.BankCardSysManagment.entity.enums.CardStatus;
@@ -28,14 +28,14 @@ public class AdminCardServiceImpl implements AdminCardService {
     private final CardMapperForAdmin mapper;
 
     @Override
-    public FullCardInfoResponseDto getCardInformationById(String cardId) {
+    public AdminCardInfoResponseDto getCardInformationById(String cardId) {
         return cardRepository.findById(UUID.fromString(cardId))
                 .map(mapper::toFullCardInfoResponseDto)
                 .orElseThrow(CardNotFoundException::new);
     }
 
     @Override
-    public List<FullCardInfoResponseDto> getAllCards() {
+    public List<AdminCardInfoResponseDto> getAllCards() {
         return cardRepository.findAll()
                 .stream()
                 .map(mapper::toFullCardInfoResponseDto)
@@ -43,7 +43,7 @@ public class AdminCardServiceImpl implements AdminCardService {
     }
 
     @Override
-    public FullCardInfoResponseDto createCard(CardInfoRequestDto cardInfoRequestDto) {
+    public AdminCardInfoResponseDto createCard(CardInfoRequestDto cardInfoRequestDto) {
         User user = userRepository.findById(UUID.fromString(cardInfoRequestDto.getUserId()))
                 .orElseThrow(UserNotFoundException::new);
         Card card = mapper.toCard(cardInfoRequestDto);

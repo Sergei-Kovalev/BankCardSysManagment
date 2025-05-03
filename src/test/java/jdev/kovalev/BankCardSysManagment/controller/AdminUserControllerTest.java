@@ -2,7 +2,7 @@ package jdev.kovalev.BankCardSysManagment.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jdev.kovalev.BankCardSysManagment.dto.request.UserInfoRequestDto;
-import jdev.kovalev.BankCardSysManagment.dto.response.FullUserInfoResponseDto;
+import jdev.kovalev.BankCardSysManagment.dto.response.AdminUserInfoResponseDto;
 import jdev.kovalev.BankCardSysManagment.exception.UserNotFoundException;
 import jdev.kovalev.BankCardSysManagment.exception.handler.ControllersExceptionHandler;
 import jdev.kovalev.BankCardSysManagment.service.AdminUserService;
@@ -47,7 +47,7 @@ class AdminUserControllerTest {
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
-    private FullUserInfoResponseDto responseDto;
+    private AdminUserInfoResponseDto responseDto;
     private String userId;
     private UserInfoRequestDto requestDto;
 
@@ -61,12 +61,16 @@ class AdminUserControllerTest {
         objectMapper = new ObjectMapper();
 
         userId = "48fbd421-27d7-487e-b1bb-4b38fe0aba58";
-        responseDto = FullUserInfoResponseDto.builder()
+        responseDto = AdminUserInfoResponseDto.builder()
                 .userId(UUID.fromString(userId))
                 .firstAndLastName("Siarhei Kavaleu")
+                .role("ROLE_USER")
                 .build();
         requestDto = UserInfoRequestDto.builder()
                 .firstAndLastName("Siarhei Kavaleu")
+                .username("Misha")
+                .password("pass")
+                .role("ROLE_USER")
                 .build();
     }
 
@@ -134,6 +138,7 @@ class AdminUserControllerTest {
                     .andExpect(status().isCreated())
                     .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andExpect(jsonPath("$.firstAndLastName").value("Siarhei Kavaleu"))
+                    .andExpect(jsonPath("$.role").value("ROLE_USER"))
                     .andExpect(jsonPath("$.userId").value(userId))
                     .andDo(print());
 
@@ -142,16 +147,31 @@ class AdminUserControllerTest {
 
         @Test
         @SneakyThrows
-        void createUser_whenInvalidInput_returnsBadRequest() {
-            UserInfoRequestDto invalidRequestDto = UserInfoRequestDto.builder()
-                    .firstAndLastName("")
-                    .build();
+        void createUser_whenInvalidFirstAndLastName_returnsBadRequest() {
+            UserInfoRequestDto invalidRequestDto = requestDto;
+            requestDto.setFirstAndLastName("");
 
             mockMvc.perform(post("/admin/users")
                                     .contentType(MediaType.APPLICATION_JSON)
                                     .content(objectMapper.writeValueAsString(invalidRequestDto)))
                     .andExpect(status().isBadRequest())
                     .andExpect(jsonPath("$.error").value("Фамилия и имя пользователя не могут быть пустыми."))
+                    .andDo(print());
+
+            verifyNoInteractions(adminUserService);
+        }
+
+        @Test
+        @SneakyThrows
+        void createUser_whenInvalidRole_returnsBadRequest() {
+            UserInfoRequestDto invalidRequestDto = requestDto;
+            requestDto.setRole("bla bla bla");
+
+            mockMvc.perform(post("/admin/users")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(objectMapper.writeValueAsString(invalidRequestDto)))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(jsonPath("$.error").value("Роль пользователя может быть только ROLE_USER или ROLE_ADMIN."))
                     .andDo(print());
 
             verifyNoInteractions(adminUserService);

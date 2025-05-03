@@ -2,7 +2,7 @@ package jdev.kovalev.BankCardSysManagment.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jdev.kovalev.BankCardSysManagment.dto.request.CardInfoRequestDto;
-import jdev.kovalev.BankCardSysManagment.dto.response.FullCardInfoResponseDto;
+import jdev.kovalev.BankCardSysManagment.dto.response.AdminCardInfoResponseDto;
 import jdev.kovalev.BankCardSysManagment.exception.CardNotFoundException;
 import jdev.kovalev.BankCardSysManagment.exception.handler.ControllersExceptionHandler;
 import jdev.kovalev.BankCardSysManagment.service.AdminCardService;
@@ -47,7 +47,7 @@ class AdminCardControllerTest {
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
-    private FullCardInfoResponseDto responseDto;
+    private AdminCardInfoResponseDto responseDto;
     private CardInfoRequestDto requestDto;
     private String userId;
     private String cardId;
@@ -64,7 +64,7 @@ class AdminCardControllerTest {
 
         userId = "48fbd421-27d7-487e-b1bb-4b38fe0aba58";
         cardId = "8b52c2e1-8641-4fa9-b983-56042d6ed600";
-        responseDto = FullCardInfoResponseDto.builder()
+        responseDto = AdminCardInfoResponseDto.builder()
                 .cardId(UUID.fromString(cardId))
                 .cardNumber("1234 5678 9101 1213")
                 .firstAndLastName("Siarhei Kavaleu")
