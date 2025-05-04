@@ -9,6 +9,7 @@ import jdev.kovalev.BankCardSysManagment.mapper.UserMapperForAdmin;
 import jdev.kovalev.BankCardSysManagment.repository.UserRepository;
 import jdev.kovalev.BankCardSysManagment.service.AdminUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +24,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 
     private final UserRepository userRepository;
     private final UserMapperForAdmin mapper;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     private Optional<User> findById(String userId) {
@@ -46,7 +48,10 @@ public class AdminUserServiceImpl implements AdminUserService {
 
     @Override
     public AdminUserInfoResponseDto createUser(UserInfoRequestDto userInfoRequestDto) {
-        User savedUser = userRepository.save(mapper.dtoToEntity(userInfoRequestDto));
+        User user = mapper.dtoToEntity(userInfoRequestDto);
+        String rawPassword = bCryptPasswordEncoder.encode(user.getPassword());
+        user.setPassword(rawPassword);
+        User savedUser = userRepository.save(user);
         return mapper.entityToDto(savedUser);
     }
 
