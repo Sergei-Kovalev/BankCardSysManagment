@@ -8,6 +8,8 @@ out
 mvnw
 mvnw.cmd
 
+build
+
 ### STS ###
 .apt_generated
 .classpath
