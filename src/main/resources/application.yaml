@@ -12,8 +12,8 @@ jwt:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/bcsm_db
-#    url: jdbc:postgresql://PostgreSQL:5432/bcsm_db
+#    url: jdbc:postgresql://localhost:5432/bcsm_db
+    url: jdbc:postgresql://PostgreSQL:5432/bcsm_db
 
     username: postgres
     password: postgres
