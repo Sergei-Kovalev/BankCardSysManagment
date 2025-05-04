@@ -25,6 +25,7 @@ repositories {
 }
 
 val mapstructVersion = "1.6.3"
+val jjwtVersion = "0.11.2"
 
 
 dependencies {
@@ -32,7 +33,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-security")
-	implementation("io.jsonwebtoken:jjwt-api:0.12.6")
+	implementation("io.jsonwebtoken:jjwt-api:${jjwtVersion}")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:${jjwtVersion}")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:${jjwtVersion}")
 
 	implementation("org.liquibase:liquibase-core")
 

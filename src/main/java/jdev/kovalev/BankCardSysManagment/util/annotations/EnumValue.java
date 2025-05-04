@@ -1,9 +1,9 @@
-package jdev.kovalev.BankCardSysManagment.utils.annotations;
+package jdev.kovalev.BankCardSysManagment.util.annotations;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 import jakarta.validation.constraints.NotNull;
-import jdev.kovalev.BankCardSysManagment.utils.EnumValidator;
+import jdev.kovalev.BankCardSysManagment.util.EnumValidator;
 
 
 import java.lang.annotation.Documented;
