@@ -27,7 +27,6 @@ repositories {
 val mapstructVersion = "1.6.3"
 val jjwtVersion = "0.11.2"
 
-
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-validation")

@@ -135,6 +135,9 @@ class AdminUserServiceImplTest {
         void updateUserWhenPresentItDb() {
             UserInfoRequestDto userInfoRequestDto2 = UserInfoRequestDto.builder()
                     .firstAndLastName("Mihail Nekrasov")
+                    .role("ROLE_ADMIN")
+                    .username("name")
+                    .password("pass")
                     .build();
             AdminUserInfoResponseDto expected = adminUserInfoResponseDto2;
 

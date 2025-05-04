@@ -162,7 +162,7 @@ class AdminCardControllerTest {
                                     .contentType(MediaType.APPLICATION_JSON)
                                     .content(objectMapper.writeValueAsString(requestDto)))
                     .andExpect(status().isBadRequest())
-                    .andExpect(jsonPath("$.error").value("Номер карты должен выглядеть как 16 цифр разделенных пробелом."))
+                    .andExpect(jsonPath("$.error").value("Номер карты должен выглядеть как 16 цифр в блоках по 4 разделенных пробелом."))
                     .andDo(print());
 
             verifyNoInteractions(adminCardService);
