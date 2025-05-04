@@ -1,7 +1,7 @@
 package jdev.kovalev.BankCardSysManagment.mapper;
 
 import jdev.kovalev.BankCardSysManagment.dto.request.CardInfoRequestDto;
-import jdev.kovalev.BankCardSysManagment.dto.response.FullCardInfoResponseDto;
+import jdev.kovalev.BankCardSysManagment.dto.response.AdminCardInfoResponseDto;
 import jdev.kovalev.BankCardSysManagment.entity.Card;
 import jdev.kovalev.BankCardSysManagment.entity.User;
 import jdev.kovalev.BankCardSysManagment.entity.enums.CardStatus;
@@ -21,7 +21,7 @@ class CardMapperForAdminTest {
     private String userId;
     private User user;
     private Card card;
-    private FullCardInfoResponseDto fullCardInfoResponseDto;
+    private AdminCardInfoResponseDto adminCardInfoResponseDto;
     private CardInfoRequestDto cardInfoRequestDto;
 
     @BeforeEach
@@ -40,7 +40,7 @@ class CardMapperForAdminTest {
                 .cardStatus(CardStatus.ACTIVE)
                 .balance(BigDecimal.valueOf(22.2))
                 .build();
-        fullCardInfoResponseDto = FullCardInfoResponseDto.builder()
+        adminCardInfoResponseDto = AdminCardInfoResponseDto.builder()
                 .cardId(UUID.fromString(cardId))
                 .cardNumber("1230 4560 7890 0120")
                 .firstAndLastName("Siarhei Kavaleu")
@@ -59,9 +59,9 @@ class CardMapperForAdminTest {
 
     @Test
     void toFullCardInfoResponseDto() {
-        FullCardInfoResponseDto actual = mapper.toFullCardInfoResponseDto(card);
+        AdminCardInfoResponseDto actual = mapper.toFullCardInfoResponseDto(card);
 
-        assertThat(actual).isEqualTo(fullCardInfoResponseDto);
+        assertThat(actual).isEqualTo(adminCardInfoResponseDto);
     }
 
     @Test

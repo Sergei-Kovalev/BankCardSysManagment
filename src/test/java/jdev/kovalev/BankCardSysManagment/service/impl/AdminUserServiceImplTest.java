@@ -1,7 +1,7 @@
 package jdev.kovalev.BankCardSysManagment.service.impl;
 
 import jdev.kovalev.BankCardSysManagment.dto.request.UserInfoRequestDto;
-import jdev.kovalev.BankCardSysManagment.dto.response.FullUserInfoResponseDto;
+import jdev.kovalev.BankCardSysManagment.dto.response.AdminUserInfoResponseDto;
 import jdev.kovalev.BankCardSysManagment.entity.User;
 import jdev.kovalev.BankCardSysManagment.exception.UserNotFoundException;
 import jdev.kovalev.BankCardSysManagment.mapper.UserMapperForAdmin;
@@ -36,8 +36,8 @@ class AdminUserServiceImplTest {
     private User user;
     private User user2;
     private String userId;
-    private FullUserInfoResponseDto fullUserInfoResponseDto;
-    private FullUserInfoResponseDto fullUserInfoResponseDto2;
+    private AdminUserInfoResponseDto adminUserInfoResponseDto;
+    private AdminUserInfoResponseDto adminUserInfoResponseDto2;
     private UserInfoRequestDto userInfoRequestDto;
 
     @BeforeEach
@@ -51,11 +51,11 @@ class AdminUserServiceImplTest {
                 .userId(UUID.fromString(userId))
                 .firstAndLastName("Mihail Nekrasov")
                 .build();
-        fullUserInfoResponseDto = FullUserInfoResponseDto.builder()
+        adminUserInfoResponseDto = AdminUserInfoResponseDto.builder()
                 .userId(UUID.fromString(userId))
                 .firstAndLastName("Siarhei Kavaleu")
                 .build();
-        fullUserInfoResponseDto2 = FullUserInfoResponseDto.builder()
+        adminUserInfoResponseDto2 = AdminUserInfoResponseDto.builder()
                 .userId(UUID.fromString(userId))
                 .firstAndLastName("Mihail Nekrasov")
                 .build();
@@ -71,12 +71,12 @@ class AdminUserServiceImplTest {
             when(userRepository.findById(any()))
                     .thenReturn(Optional.of(user));
             when(mapper.entityToDto(user))
-                    .thenReturn(fullUserInfoResponseDto);
+                    .thenReturn(adminUserInfoResponseDto);
 
-            FullUserInfoResponseDto actual = adminUserService.getUserInformationById(userId);
+            AdminUserInfoResponseDto actual = adminUserService.getUserInformationById(userId);
 
             assertThat(actual)
-                    .isEqualTo(fullUserInfoResponseDto);
+                    .isEqualTo(adminUserInfoResponseDto);
         }
 
         @Test
@@ -97,15 +97,15 @@ class AdminUserServiceImplTest {
             when(userRepository.findAll())
                     .thenReturn(List.of(user, user2));
             when(mapper.entityToDto(user))
-                    .thenReturn(fullUserInfoResponseDto);
+                    .thenReturn(adminUserInfoResponseDto);
             when(mapper.entityToDto(user2))
-                    .thenReturn(fullUserInfoResponseDto2);
+                    .thenReturn(adminUserInfoResponseDto2);
 
-            List<FullUserInfoResponseDto> actual = adminUserService.getAllUsers();
+            List<AdminUserInfoResponseDto> actual = adminUserService.getAllUsers();
 
             assertThat(actual)
                     .hasSize(2)
-                    .containsExactlyElementsOf(List.of(fullUserInfoResponseDto, fullUserInfoResponseDto2));
+                    .containsExactlyElementsOf(List.of(adminUserInfoResponseDto, adminUserInfoResponseDto2));
         }
     }
 
@@ -118,14 +118,14 @@ class AdminUserServiceImplTest {
             when(mapper.dtoToEntity(userInfoRequestDto))
                     .thenReturn(user);
             when(mapper.entityToDto(user))
-                    .thenReturn(fullUserInfoResponseDto);
+                    .thenReturn(adminUserInfoResponseDto);
 
-            FullUserInfoResponseDto actual = adminUserService.createUser(userInfoRequestDto);
+            AdminUserInfoResponseDto actual = adminUserService.createUser(userInfoRequestDto);
 
             assertThat(actual)
                     .isNotNull()
-                    .isInstanceOf(FullUserInfoResponseDto.class)
-                    .isEqualTo(fullUserInfoResponseDto);
+                    .isInstanceOf(AdminUserInfoResponseDto.class)
+                    .isEqualTo(adminUserInfoResponseDto);
         }
     }
 
@@ -136,16 +136,16 @@ class AdminUserServiceImplTest {
             UserInfoRequestDto userInfoRequestDto2 = UserInfoRequestDto.builder()
                     .firstAndLastName("Mihail Nekrasov")
                     .build();
-            FullUserInfoResponseDto expected = fullUserInfoResponseDto2;
+            AdminUserInfoResponseDto expected = adminUserInfoResponseDto2;
 
             when(userRepository.findById(any()))
                     .thenReturn(Optional.of(user));
             when(userRepository.save(any()))
                     .thenReturn(user2);
             when(mapper.entityToDto(user2))
-                    .thenReturn(fullUserInfoResponseDto2);
+                    .thenReturn(adminUserInfoResponseDto2);
 
-            FullUserInfoResponseDto actual = adminUserService.updateUser(userId, userInfoRequestDto2);
+            AdminUserInfoResponseDto actual = adminUserService.updateUser(userId, userInfoRequestDto2);
 
             assertThat(actual)
                     .isEqualTo(expected);

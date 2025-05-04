@@ -1,13 +1,12 @@
 package jdev.kovalev.BankCardSysManagment.service.impl;
 
 import jdev.kovalev.BankCardSysManagment.dto.request.CardInfoRequestDto;
-import jdev.kovalev.BankCardSysManagment.dto.response.FullCardInfoResponseDto;
+import jdev.kovalev.BankCardSysManagment.dto.response.AdminCardInfoResponseDto;
 import jdev.kovalev.BankCardSysManagment.entity.Card;
 import jdev.kovalev.BankCardSysManagment.entity.User;
 import jdev.kovalev.BankCardSysManagment.entity.enums.CardStatus;
 import jdev.kovalev.BankCardSysManagment.exception.CardNotFoundException;
 import jdev.kovalev.BankCardSysManagment.exception.UserNotFoundException;
-import jdev.kovalev.BankCardSysManagment.exception.WrongCardStatusException;
 import jdev.kovalev.BankCardSysManagment.mapper.CardMapperForAdmin;
 import jdev.kovalev.BankCardSysManagment.repository.CardRepository;
 import jdev.kovalev.BankCardSysManagment.repository.UserRepository;
@@ -29,14 +28,14 @@ public class AdminCardServiceImpl implements AdminCardService {
     private final CardMapperForAdmin mapper;
 
     @Override
-    public FullCardInfoResponseDto getCardInformationById(String cardId) {
+    public AdminCardInfoResponseDto getCardInformationById(String cardId) {
         return cardRepository.findById(UUID.fromString(cardId))
                 .map(mapper::toFullCardInfoResponseDto)
                 .orElseThrow(CardNotFoundException::new);
     }
 
     @Override
-    public List<FullCardInfoResponseDto> getAllCards() {
+    public List<AdminCardInfoResponseDto> getAllCards() {
         return cardRepository.findAll()
                 .stream()
                 .map(mapper::toFullCardInfoResponseDto)
@@ -44,7 +43,7 @@ public class AdminCardServiceImpl implements AdminCardService {
     }
 
     @Override
-    public FullCardInfoResponseDto createCard(CardInfoRequestDto cardInfoRequestDto) {
+    public AdminCardInfoResponseDto createCard(CardInfoRequestDto cardInfoRequestDto) {
         User user = userRepository.findById(UUID.fromString(cardInfoRequestDto.getUserId()))
                 .orElseThrow(UserNotFoundException::new);
         Card card = mapper.toCard(cardInfoRequestDto);
@@ -57,11 +56,7 @@ public class AdminCardServiceImpl implements AdminCardService {
     public String changeStatus(String cardId, String status) {
         Card card = cardRepository.findById(UUID.fromString(cardId))
                 .orElseThrow(CardNotFoundException::new);
-        try {
-            card.setCardStatus(CardStatus.valueOf(status.toUpperCase()));
-        } catch (IllegalArgumentException e) {
-            throw new WrongCardStatusException();
-        }
+        card.setCardStatus(CardStatus.valueOf(status.toUpperCase()));
         return String.format(SUCCESSFULLY_CHANGE_STATUS, cardId);
     }
 

@@ -9,6 +9,6 @@ CREATE TABLE cards
     card_status         VARCHAR(30)                     NOT NULL,
     balance             NUMERIC(15, 2)                  NOT NULL,
     CONSTRAINT pk_cards PRIMARY KEY (card_id),
-    CONSTRAINT ch_card_apply_status CHECK ( card_status in ('ACTIVE', 'BLOCKED', 'EXPIRED')),
+    CONSTRAINT ch_card_status CHECK ( card_status in ('ACTIVE', 'BLOCKED', 'EXPIRED')),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );

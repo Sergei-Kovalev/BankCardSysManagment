@@ -1,7 +1,7 @@
 package jdev.kovalev.BankCardSysManagment.controller;
 
 import jdev.kovalev.BankCardSysManagment.dto.request.UserInfoRequestDto;
-import jdev.kovalev.BankCardSysManagment.dto.response.FullUserInfoResponseDto;
+import jdev.kovalev.BankCardSysManagment.dto.response.AdminUserInfoResponseDto;
 import jdev.kovalev.BankCardSysManagment.service.AdminUserService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.UUID;
@@ -27,23 +27,23 @@ public class AdminUserController {
     private final AdminUserService adminUserService;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<FullUserInfoResponseDto> getUserInformationByUserId(@PathVariable @UUID String userId) {
+    public ResponseEntity<AdminUserInfoResponseDto> getUserInformationByUserId(@PathVariable @UUID String userId) {
         return new ResponseEntity<>(adminUserService.getUserInformationById(userId), HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<FullUserInfoResponseDto>> getAllUserInformation() {
+    public ResponseEntity<List<AdminUserInfoResponseDto>> getAllUserInformation() {
         return new ResponseEntity<>(adminUserService.getAllUsers(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<FullUserInfoResponseDto> createUser(@Validated @RequestBody UserInfoRequestDto userInfoRequestDto) {
+    public ResponseEntity<AdminUserInfoResponseDto> createUser(@Validated @RequestBody UserInfoRequestDto userInfoRequestDto) {
         return new ResponseEntity<>(adminUserService.createUser(userInfoRequestDto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<FullUserInfoResponseDto> updateUser(@PathVariable @UUID String userId,
-                                                              @Validated @RequestBody UserInfoRequestDto userInfoRequestDto) {
+    public ResponseEntity<AdminUserInfoResponseDto> updateUser(@PathVariable @UUID String userId,
+                                                               @Validated @RequestBody UserInfoRequestDto userInfoRequestDto) {
         return new ResponseEntity<>(adminUserService.updateUser(userId, userInfoRequestDto), HttpStatus.OK);
     }
 

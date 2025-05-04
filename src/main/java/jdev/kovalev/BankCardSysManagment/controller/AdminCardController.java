@@ -1,7 +1,7 @@
 package jdev.kovalev.BankCardSysManagment.controller;
 
 import jdev.kovalev.BankCardSysManagment.dto.request.CardInfoRequestDto;
-import jdev.kovalev.BankCardSysManagment.dto.response.FullCardInfoResponseDto;
+import jdev.kovalev.BankCardSysManagment.dto.response.AdminCardInfoResponseDto;
 import jdev.kovalev.BankCardSysManagment.service.AdminCardService;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.constraints.UUID;
@@ -28,17 +28,17 @@ public class AdminCardController {
     private final AdminCardService adminCardService;
 
     @GetMapping("/{cardId}")
-    public ResponseEntity<FullCardInfoResponseDto> getCardInformationByCardId(@PathVariable @UUID String cardId) {
+    public ResponseEntity<AdminCardInfoResponseDto> getCardInformationByCardId(@PathVariable @UUID String cardId) {
         return new ResponseEntity<>(adminCardService.getCardInformationById(cardId), HttpStatus.OK);
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<FullCardInfoResponseDto>> getAllCardsInformation() {
+    public ResponseEntity<List<AdminCardInfoResponseDto>> getAllCardsInformation() {
         return new ResponseEntity<>(adminCardService.getAllCards(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<FullCardInfoResponseDto> createCard(@Validated @RequestBody CardInfoRequestDto cardInfoRequestDto) {
+    public ResponseEntity<AdminCardInfoResponseDto> createCard(@Validated @RequestBody CardInfoRequestDto cardInfoRequestDto) {
         return new ResponseEntity<>(adminCardService.createCard(cardInfoRequestDto), HttpStatus.CREATED);
     }
 
