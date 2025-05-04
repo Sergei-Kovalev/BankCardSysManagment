@@ -1,5 +1,6 @@
 package jdev.kovalev.BankCardSysManagment.dto.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +12,10 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "DTO с информацией по всем картам пользователя. Роль - Пользователь.")
 public class UserCardsResponseDto {
+    @Schema(description = "Количество страниц(для фронта).")
     private Integer totalPages;
+    @Schema(description = "DTO с информацией по карте. Роль - Пользователь. Список карт")
     private List<UserCardInfo> cards;
 }
